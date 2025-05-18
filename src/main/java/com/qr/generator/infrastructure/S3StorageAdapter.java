@@ -11,7 +11,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 @Component
 public class S3StorageAdapter implements StoragePort {
 
-    private final S3Client s3Cliente;
+    private final S3Client s3Client;
     private final String bucketName;
     private final String region;
 
@@ -19,7 +19,7 @@ public class S3StorageAdapter implements StoragePort {
                             @Value("${aws.s3.bucket.name}") String bucketName) {
         this.bucketName = bucketName;
         this.region = region;
-        this.s3Cliente = S3Client.builder()
+        this.s3Client = S3Client.builder()
                 .region(Region.of(this.region))
                 .build();
     }
@@ -33,7 +33,7 @@ public class S3StorageAdapter implements StoragePort {
                 .contentType(contentType)
                 .build();
 
-        s3Cliente.putObject(putObjectRequest, RequestBody.fromBytes(fileData));
+        s3Client.putObject(putObjectRequest, RequestBody.fromBytes(fileData));
 
         return String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, region, fileName);
     }
